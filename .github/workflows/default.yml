@@ -7,7 +7,7 @@ on:
       - 'main'
 
 jobs:
-  test:
+  terraform-test:
     strategy:
       matrix:
         runner: [ 'ubuntu-latest' ]
@@ -15,7 +15,8 @@ jobs:
         test: [ 'simple' ]
         test-target: [ 'validate' ]
     
-    uses: ./.github/workflows/test.yml
+    uses: ./.github/workflows/iac-github-actions-test-terraform-workflows.yml
     with:
       test-name: ${{matrix.test}}
       backend-driver: ${{matrix.backend}}
+      test-target: workflow-terraform-${{matrix.test-target}}
