@@ -1,0 +1,88 @@
+---
+name: iac-gh-terraform // prepare
+author: Tech Javelin Ltd <https://github.com/techjavelin>
+
+on: 
+  workflow_call:
+    inputs:
+      runner:
+        description: "Where the job should run (e.g. 'self-hosted', 'ubuntu-latest', etc)"
+        required: true
+        default: 'ubuntu-latest'
+
+      source_dir:
+        description: "Relative path from project root to where your terraform files are"
+        required: false
+        default: '.'
+
+    secrets:
+      cloud_api_key:
+        description: "If you use terraform cloud for a backend, provide your cloud api key"
+        required: false
+
+    outputs:
+      plan:
+        description: "The output of `terraform plan`"
+        value: ${{ jobs.plan.outputs.plan }}
+
+      result:
+        description: "The plan Outcome"
+        value: ${{ jobs.plan.outputs.result }}
+
+      artifact:
+        description: "The plan artifact to be provided to terraform apply"
+        value: ${{ jobs.plan.outputs.artifact }}
+
+jobs:
+  plan:
+    name: Generate Terraform Plan
+    runs-on: ${{ inputs.runner }}
+
+    permissions:
+      # Needed to upload the results of scorecard analysis to the code-scanning dashboard
+      security-events: write
+
+    defaults:
+      run:
+        working-directory: ${{ inputs.source_dir }}
+
+    outputs:
+      init: ${{ steps.init.outcome }}
+      result: ${{ steps.plan.outcome }}
+      plan: ${{ steps.plan.outputs.stdout }}
+      artifact: ${{ steps.plan.outputs.artifact }}
+
+    env:
+      cloud_api_key: ${{ secrets.cloud_api_key }}
+      artifact_name: ${{ github.sha }}-${{ github.run_id }}-${{ github.run_number }}.tfplan
+
+    steps:
+      - name: Checkout from Source Control
+        uses: actions/checkout@v3
+
+      - if: ${{ env.cloud_api_key != '' }}
+        name: Setup Terraform (Using Terraform Cloud)
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ env.cloud_api_key }}
+
+      - if: ${{ env.cloud_api_key == '' }}
+        name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      - name: Generate Plan
+        id: plan
+        run: |
+          terraform -out=${{ env.artifact_name }} -no-color
+          echo "artifact=${{ env.artifact_name }} >> $GITHUB_OUTPUT"
+          echo "Generated Terraform Plan Successfully to `${{ env.artifact_name }} >> $GITHUB_STEP_SUMMARY"
+      
+      - name: Save the Plan to be used later
+        id: upload
+        with:
+          name: terraform-plan
+          path: ${{ env.artifact_name }}
