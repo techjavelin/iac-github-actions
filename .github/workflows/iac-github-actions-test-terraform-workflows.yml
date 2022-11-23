@@ -20,7 +20,6 @@ jobs:
     with:
       source_dir: test-${github.sha}
       runner: ubuntu-latest
-      cache-dir: test-${{github.sha}}/
       cache-key: ${{github.sha}}
 
   _prepare-tests:
@@ -37,7 +36,7 @@ jobs:
       - name: iac-github-actions // test // terraform // cache
         uses: actions/cache@v3
         with:
-          path: test-${{github.sha}}/
+          path: ${{ inputs.source_dir }}/
           key: ${{github.sha}}
 
       - name: iac-github-actions // test // terraform // prepare-tests

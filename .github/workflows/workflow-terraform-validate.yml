@@ -11,18 +11,13 @@ on:
         default: 'ubuntu-latest'
 
       source_dir:
-        description: "Relative path from project root to where your terraform files are"
+        description: "Absolute path or relative path from project root to where your terraform files are"
         required: false
         type: string
         default: '.'
 
       cache-key:
-        description: "Will use a cached version of a directory in the workspace with this key"
-        required: false
-        type: string
-
-      cache-dir:
-        description: "The directory to use a cached version of"
+        description: "Will use a cached version of the source_dir if found"
         required: false
         type: string
 
@@ -77,12 +72,18 @@ jobs:
         id: validate
         run: terraform -chdir=${{ inputs.source_dir }} validate -no-color
 
-  terraform_lint:
+  lint:
     name: terraform // lint
     runs-on: ${{ inputs.runner }}
 
     steps:
       - uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: ${{ inputs.cache-dir }}
+          key: ${{ inputs.cache-key }}
+        if: ${{ inputs.cache-key != '' }}
 
       - name: Setup TFLint
         uses: terraform-linters/setup-tflint@v2
