@@ -6,9 +6,6 @@ on:
     branches:
       - 'main'
 
-env:
-  TEST_TARGET_PATH: ${{ runner.temp }}/${{ github.sha }}-${{ github.run_id }}-${{ github.run_number }}/${{ matrix.terraform-backend }}-${{ matrix.test }}
-
 jobs:
   test:
     strategy:
