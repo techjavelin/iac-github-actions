@@ -26,6 +26,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    steps:
+      - run: echo ""
+
   _prepare-tests:
     runs-on: ubuntu-latest
 
