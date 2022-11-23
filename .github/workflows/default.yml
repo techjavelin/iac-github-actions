@@ -13,6 +13,6 @@ jobs:
         runner: [ 'ubuntu-latest' ]
         backend: [ 'local', 'terraform-cloud' ]
         test: [ 'simple' ]
-    uses: ${{ github.repository }}.github/workflows/iac-github-actions-test-terraform-workflows.yml@${{ github.sha }}
+    uses: techjavelin/iac-github-actions/.github/workflows/iac-github-actions-test-terraform-workflows.yml@${{ github.sha }}
     with:
       test-path: ${{ runner.temp }}/workflow-terraform-${{matrix.test-target}}

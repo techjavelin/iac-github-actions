@@ -3,21 +3,22 @@ name: iac-github-actions // terraform / run-tests
 
 on: 
   workflow_call:
+    inputs:
       test-path:
         description: "The temporary path where the tests are located"
         required: true
         type: string
 
 jobs:
-  do-test-validate:
+  validate:
     name: iac-github-actions // run-tests // terraform // validate
     uses: ./.github/workflows/workflow-terraform-validate.yml
     with:
       source_dir: ${{inputs.test-path}}
 
-  do-test-prepare:
-    name: iac-github-actions // run-tests // terraform // prepare
-    uses: ./.github/workflows/workflow-terraform-prepare.yml
-    with:
-      source_dir: ${{inputs.test-path}}
+  # prepare:
+  #   name: iac-github-actions // run-tests // terraform // prepare
+  #   uses: ./.github/workflows/workflow-terraform-prepare.yml
+  #   with:
+  #     source_dir: ${{inputs.test-path}}
   
