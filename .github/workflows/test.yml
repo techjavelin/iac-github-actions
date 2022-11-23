@@ -28,6 +28,6 @@ jobs:
       - name: iac-github-actions // test // prepare-tests
         run: test/scripts/prepare_test.sh
         env:
-          TEST_TARGET_PATH: ${{ runner.temp }}/${{ env.GITHUB_SHA }}-${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}/${{ inputs.backend-driver }}-${{ inputs.test-name }}
+          TEST_TARGET_PATH: ${{ runner.temp }}/${{ github.sha }}-${{ github.run_id }}-${{ github.run_number }}/${{ inputs.backend-driver }}-${{ inputs.test-name }}
 
       
