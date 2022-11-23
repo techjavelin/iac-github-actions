@@ -1,24 +1,44 @@
 ---
-name: iac-github-actions // terraform / run-tests
+name: iac-github-actions // run-tests
 
 on: 
   workflow_call:
     inputs:
-      test-path:
-        description: "The temporary path where the tests are located"
+      test-name:
+        description: "Which tests to run"
+        required: true
+        type: string
+      backend-driver:
+        description: "The backend driver to use for the tests"
         required: true
         type: string
 
 jobs:
-  validate:
-    name: iac-github-actions // run-tests // terraform // validate
+  do-test-validate:
+    needs: [ _prepare-tests ]
     uses: ./.github/workflows/workflow-terraform-validate.yml
     with:
-      source_dir: ${{inputs.test-path}}
+      source_dir: test
 
-  # prepare:
-  #   name: iac-github-actions // run-tests // terraform // prepare
-  #   uses: ./.github/workflows/workflow-terraform-prepare.yml
-  #   with:
-  #     source_dir: ${{inputs.test-path}}
-  
+  _prepare-tests:
+    runs-on: ubuntu-latest
+
+    env:
+      TEST_NAME: "${{ inputs.test-name }}"
+      BACKEND: ${{ inputs.backend-driver }}
+
+    steps:
+      - name: iac-github-actions // test // checkout
+        uses: actions/checkout@v3
+
+      - name: iac-github-actions // test // terraform // cache
+        uses: actions/cache@v3
+        with:
+          path: test/
+          key: ${{github.sha}}
+
+      - name: iac-github-actions // test // terraform // prepare-tests
+        id: prepare
+        run: test/scripts/prepare_test.sh
+        env:
+          TEST_TARGET_PATH:  test/

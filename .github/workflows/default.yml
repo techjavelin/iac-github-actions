@@ -10,9 +10,9 @@ jobs:
   terraform-validate:
     strategy:
       matrix:
-        runner: [ 'ubuntu-latest' ]
-        backend: [ 'local', 'terraform-cloud' ]
         test: [ 'simple' ]
+        backend: [ 'local', 'terraform-cloud' ]
     uses: ./.github/workflows/iac-github-actions-test-terraform-workflows.yml
     with:
-      test-path: ${{ runner.temp }}/workflow-terraform-${{matrix.test-target}}
+      test: ${{ matrix.test }}
+      backend: ${{ matrix.backend }}
