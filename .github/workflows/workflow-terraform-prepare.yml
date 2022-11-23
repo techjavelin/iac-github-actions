@@ -1,5 +1,5 @@
 ---
-name: iac-gh-terraform // prepare
+name: iac-github-actions // terraform // prepare
 author: Tech Javelin Ltd <https://github.com/techjavelin>
 
 on: 

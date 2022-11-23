@@ -1,5 +1,5 @@
 ---
-name: iac-gh-terraform // validate
+name: techjavelin/iac-github-actions // terraform // validate
 
 on:
   workflow_call:
@@ -35,7 +35,7 @@ on:
 
 jobs:
   validate:
-    name: Validate Terraform Files
+    name: terraform // valdate
     runs-on: ${{ inputs.runner }}
 
     outputs:
@@ -62,7 +62,7 @@ jobs:
         run: terraform -chdir=${{ inputs.source_dir }} validate -no-color
 
   terraform_lint:
-    name: Terraform Lint
+    name: terraform // lint
     runs-on: ${{ inputs.runner }}
 
     steps:
