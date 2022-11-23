@@ -47,6 +47,6 @@ jobs:
         run: cp terraform/${{ test-target }}.yml .github/workflows
 
   _run-test:
-    uses: ./github/workflows/${{ inputs.test-target }}.yml
+    uses: ./.github/workflows/${{ inputs.test-target }}.yml
     with:
       source_dir: ${{ runner.tmp }}/${{ env.JOB_INFO }}
