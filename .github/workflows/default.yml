@@ -1,0 +1,36 @@
+---
+name: Continuous Build
+
+on:
+  push:
+    branches:
+      - 'main'
+
+env:
+  TEST_TARGET_PATH: ${{ runner.temp }}/${{ github.sha }}-${{ github.run_id }}-${{ github.run_number }}/${{ matrix.terraform-backend }}-${{ matrix.test }}
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        runner: [ 'ubuntu-latest' ]
+        backend: [ 'local', 'terraform-cloud' ]
+        test: [ 'simple' ]
+    
+    uses: ./.github.workflows/test.yml
+    with:
+      test-name: ${{matrix.test}}
+      backend-driver: ${{matrix.backend}}
+
+
+  # _prepare-test-target:
+
+  # _test-workflow:
+  #   name: test-workflow // ${{ matrix.runner }}
+    
+  #   uses: ./terraform/validate.yml
+  #   with:
+  #     runner: ${{ matrix.runner }}
+  #     source_dir: ${{ env.TEST_TARGET_PATH }}
+    
+

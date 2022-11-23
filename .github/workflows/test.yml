@@ -1,0 +1,31 @@
+---
+name: iac-github-actions // run-tests
+
+on: 
+  workflow_call:
+    inputs:
+      test-name:
+        description: "Which tests to run"
+        required: true
+        type: string
+        default: simple
+      backend-driver:
+        description: "The backend driver to use for the tests"
+        required: true
+        type: string
+        default: local
+
+jobs:
+  prepare-tests:
+    runs-on: ubuntu-latest
+
+    env:
+      TEST_TARGET_PATH: ${{ runner.temp }}/${{ github.sha }}-${{ github.run_id }}-${{ github.run_number }}/${{ inputs.backend-driver }}-${{ inputs.test-name }}
+      TEST_NAME: "${{ inputs.test-name }}"
+      BACKEND: ${{ inputs.backend-driver }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - run: test/scripts/prepare_test.sh
+
+      
