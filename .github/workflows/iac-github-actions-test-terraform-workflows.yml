@@ -18,7 +18,7 @@ jobs:
     needs: [ _prepare-tests ]
     uses: ./.github/workflows/workflow-terraform-validate.yml
     with:
-      source_dir: test
+      source_dir: test-${github.sha}
       runner: ubuntu-latest
 
   _prepare-tests:
@@ -35,11 +35,11 @@ jobs:
       - name: iac-github-actions // test // terraform // cache
         uses: actions/cache@v3
         with:
-          path: test/
+          path: test-${{github.sha}}/
           key: ${{github.sha}}
 
       - name: iac-github-actions // test // terraform // prepare-tests
         id: prepare
         run: test/scripts/prepare_test.sh
         env:
-          TEST_TARGET_PATH:  test/
+          TEST_TARGET_PATH: test-${{github.sha}}/
