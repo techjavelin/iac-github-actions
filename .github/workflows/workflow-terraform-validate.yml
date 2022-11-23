@@ -53,7 +53,7 @@ jobs:
 
       - uses: actions/cache@v3
         with:
-          path: ${{ inputs.cache-dir }}
+          path: ${{ inputs.source_dir }}
           key: ${{ inputs.cache-key }}
         if: ${{ inputs.cache-key != '' }}
 
@@ -81,7 +81,7 @@ jobs:
 
       - uses: actions/cache@v3
         with:
-          path: ${{ inputs.cache-dir }}
+          path: ${{ inputs.source_dir }}
           key: ${{ inputs.cache-key }}
         if: ${{ inputs.cache-key != '' }}
 
