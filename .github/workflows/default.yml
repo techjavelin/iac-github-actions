@@ -17,20 +17,7 @@ jobs:
         backend: [ 'local', 'terraform-cloud' ]
         test: [ 'simple' ]
     
-    uses: ./.github.workflows/test.yml
+    uses: ./.github/workflows/test.yml
     with:
       test-name: ${{matrix.test}}
       backend-driver: ${{matrix.backend}}
-
-
-  # _prepare-test-target:
-
-  # _test-workflow:
-  #   name: test-workflow // ${{ matrix.runner }}
-    
-  #   uses: ./terraform/validate.yml
-  #   with:
-  #     runner: ${{ matrix.runner }}
-  #     source_dir: ${{ env.TEST_TARGET_PATH }}
-    
-
