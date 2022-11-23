@@ -15,4 +15,4 @@ jobs:
         test: [ 'simple' ]
     uses: ${{ github.repository }}.github/workflows/iac-github-actions-test-terraform-workflows.yml@${{ github.sha }}
     with:
-      test-path: workflow-terraform-${{matrix.test-target}}
+      test-path: ${{ runner.temp }}/workflow-terraform-${{matrix.test-target}}
