@@ -16,6 +16,16 @@ on:
         type: string
         default: '.'
 
+      cache-key:
+        description: "Will use a cached version of a directory in the workspace with this key"
+        required: false
+        type: string
+
+      cache-dir:
+        description: "The directory to use a cached version of"
+        required: false
+        type: string
+
     outputs:
       init:
         description: "Initialization Output"
@@ -45,6 +55,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: ${{ inputs.cache-dir }}
+          key: ${{ inputs.cache-key }}
+        if: ${{ inputs.cache-key != '' }}
 
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v2
