@@ -40,6 +40,6 @@ jobs:
           TEST_TARGET_PATH: ${{ runner.temp }}/${{ env.JOB_INFO }}
 
   _run-test:
-    uses: ${{ github.repository }}/terraform/validate.yml@${{ github.ref_name }}
+    uses: ./terraform/validate.yml
     with:
       source_dir: ${{ runner.tmp }}/${{ env.JOB_INFO }}
