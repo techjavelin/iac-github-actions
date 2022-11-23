@@ -49,4 +49,4 @@ jobs:
   _run-test:
     uses: ./.github/workflows/workflow-terraform-validate.yml
     with:
-      source_dir: ${{ runner.tmp }}/${{ env.JOB_INFO }}
+      source_dir: ${{ jobs._prepare-tests.steps.prepare.env.TEST_TARGET_PATH }}
