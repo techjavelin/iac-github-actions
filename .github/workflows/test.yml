@@ -8,19 +8,21 @@ on:
         description: "Which tests to run"
         required: true
         type: string
-        default: simple
       backend-driver:
         description: "The backend driver to use for the tests"
         required: true
         type: string
-        default: local
+      tmpdir:
+        description: "The tmpdir to use for tests"
+        required: true
+        type: string
 
 jobs:
   prepare-tests:
     runs-on: ubuntu-latest
 
     env:
-      TEST_TARGET_PATH: ${{ env.RUNNER_TEMP }}/${{ env.GITHUB_SHA }}-${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}/${{ inputs.backend-driver }}-${{ inputs.test-name }}
+      TEST_TARGET_PATH: ${{ inputs.tmpdir }}/${{ env.GITHUB_SHA }}-${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}/${{ inputs.backend-driver }}-${{ inputs.test-name }}
       TEST_NAME: "${{ inputs.test-name }}"
       BACKEND: ${{ inputs.backend-driver }}
 
