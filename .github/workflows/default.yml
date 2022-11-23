@@ -13,6 +13,7 @@ jobs:
         runner: [ 'ubuntu-latest' ]
         backend: [ 'local', 'terraform-cloud' ]
         test: [ 'simple' ]
+        test-target: [ 'validate' ]
     
     uses: ./.github/workflows/test.yml
     with:

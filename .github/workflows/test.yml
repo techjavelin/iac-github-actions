@@ -12,6 +12,10 @@ on:
         description: "The backend driver to use for the tests"
         required: true
         type: string
+      test-target:
+        description: "Which workflow is being tested"
+        required: true
+        type: string
 
 env:
   JOB_INFO: ${{ github.sha }}-${{ github.run_id }}-${{ github.run_number }}/${{ inputs.backend-driver }}-${{ inputs.test-name }}
@@ -39,7 +43,10 @@ jobs:
         env:
           TEST_TARGET_PATH: ${{ runner.temp }}/${{ env.JOB_INFO }}
 
+      - name: iac-github-actions // test // copy-target
+        run: cp terraform/${{ test-target }}.yml .github/workflows
+
   _run-test:
-    uses: ./terraform/validate.yml
+    uses: ./github/workflows/${{ inputs.test-target }}.yml
     with:
       source_dir: ${{ runner.tmp }}/${{ env.JOB_INFO }}
