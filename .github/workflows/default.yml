@@ -14,5 +14,5 @@ jobs:
         backend: [ 'local', 'terraform-cloud' ]
     uses: ./.github/workflows/iac-github-actions-test-terraform-workflows.yml
     with:
-      test: ${{ matrix.test }}
-      backend: ${{ matrix.backend }}
+      test-name: ${{ matrix.test }}
+      backend-driver: ${{ matrix.backend }}
