@@ -13,8 +13,16 @@ on:
         required: true
         type: string
 
+env:
+  JOB_INFO: ${{ github.sha }}-${{ github.run_id }}-${{ github.run_number }}/${{ inputs.backend-driver }}-${{ inputs.test-name }}
+
 jobs:
-  prepare-tests:
+  do-test:
+    needs: [ _prepare-tests, _run-test ]
+
+    runs-on: ubuntu-latest
+
+  _prepare-tests:
     runs-on: ubuntu-latest
 
     env:
@@ -26,8 +34,12 @@ jobs:
         uses: actions/checkout@v3
 
       - name: iac-github-actions // test // prepare-tests
+        id: prepare
         run: test/scripts/prepare_test.sh
         env:
-          TEST_TARGET_PATH: ${{ runner.temp }}/${{ github.sha }}-${{ github.run_id }}-${{ github.run_number }}/${{ inputs.backend-driver }}-${{ inputs.test-name }}
+          TEST_TARGET_PATH: ${{ runner.temp }}/${{ env.JOB_INFO }}
 
-      
+  _run-test:
+    uses: ./terraform/validate.yml
+    with:
+      source_dir: ${{ runner.tmp }}/${{ env.JOB_INFO }}
