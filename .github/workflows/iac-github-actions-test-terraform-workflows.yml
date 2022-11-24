@@ -18,8 +18,16 @@ jobs:
     needs: [ _prepare-tests ]
     uses: ./.github/workflows/workflow-terraform-validate.yml
     with:
-      source_dir: test
       runner: ubuntu-latest
+      source-dir: test
+      cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}
+
+  do-test-prepare:
+    needs: [ _prepare-tests ]
+    uses: ./.github/workflows/workflow-terraform-prepare.yml
+    with:
+      runner: ubuntu-latest
+      source-dir: test
       cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}
 
   _prepare-tests:

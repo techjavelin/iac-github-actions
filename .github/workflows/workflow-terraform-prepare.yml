@@ -1,6 +1,5 @@
 ---
-name: iac-github-actions // terraform // prepare
-author: Tech Javelin Ltd <https://github.com/techjavelin>
+name: techjavelin/iac-github-actions // terraform // prepare
 
 on: 
   workflow_call:
@@ -9,11 +8,18 @@ on:
         description: "Where the job should run (e.g. 'self-hosted', 'ubuntu-latest', etc)"
         required: true
         default: 'ubuntu-latest'
+        type: string
 
-      source_dir:
+      source-dir:
         description: "Relative path from project root to where your terraform files are"
         required: false
         default: '.'
+        type: string
+
+      cache-key:
+        description: "Will use a cached version of the source-dir if found"
+        required: false
+        type: string
 
     secrets:
       cloud_api_key:
@@ -44,7 +50,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ${{ inputs.source_dir }}
+        working-directory: ${{ inputs.source-dir }}
 
     outputs:
       init: ${{ steps.init.outcome }}
@@ -59,6 +65,12 @@ jobs:
     steps:
       - name: Checkout from Source Control
         uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: ${{ inputs.source-dir }}
+          key: ${{ inputs.cache-key }}
+        if: ${{ inputs.cache-key != '' }}
 
       - if: ${{ env.cloud_api_key != '' }}
         name: Setup Terraform (Using Terraform Cloud)
