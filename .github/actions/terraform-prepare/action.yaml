@@ -35,12 +35,12 @@ runs:
 
     - name: terraform // prepare // plan
       id: plan
-      run: terraform -chdir=${{ inputs.source-dir }} plan -out=${{ inputs.artifact-name }} -no-color
+      run: terraform -chdir=${{ inputs.source-dir }} plan -out=plan.tfplan -no-color
       shell: bash
     
     - name: terraform // prepare // upload        
       uses: actions/upload-artifact@v3
       id: upload
       with:
-        name: terraform-plan
-        path: ${{  inputs.artifact-name }}
+        name: ${{ inputs.artifact-name }}
+        path: plan.tfplan
