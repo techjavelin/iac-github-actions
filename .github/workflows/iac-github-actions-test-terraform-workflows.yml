@@ -12,20 +12,28 @@ on:
         description: "The backend driver to use for the tests"
         required: true
         type: string
+      target: 
+        description: "The workflow being targeted"
+        required: true
+        type: string
 
 jobs:
   test:
     name: iac-github-actions // run-tests 
     needs: _prepare-tests
+
     runs-on: ubuntu-latest
+
     steps:
-      - run: echo 
+      - name: iac-github-actions // run-test // validate
+        uses: ./.github/actions/terraform-validate
+        with:
+          runner: ubuntu-latest
+          source-dir: test
+          cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}-validate
+        if: ${{ inputs.target == 'validate' }}
 
   _prepare-tests:
-    strategy:
-      fail-fast: true
-      matrix: 
-        target: [ 'workflow-terraform-validate', 'workflow-terraform-tflint' , 'workflow-terraform-prepare' ]
     uses: ./.github/workflows/prepare-tests.yml
     with:
       test-name: ${{ inputs.test-name }}
