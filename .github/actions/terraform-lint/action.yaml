@@ -21,6 +21,6 @@ runs:
       shell: bash
 
     - name: Lint Terraform
-      run: tflint -f compact
+      run: tflint -f compact .
       working-directory: ${{ inputs.source-dir }}
       shell: bash
