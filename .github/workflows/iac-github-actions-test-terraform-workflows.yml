@@ -26,14 +26,14 @@ jobs:
 
     steps:
       - name: iac-github-actions // run-tests // prespare
-        uses: actions/prepare-tests
+        uses: ./.github/actions/prepare-tests
         with:
           test-name: ${{ inputs.test-name }}
           backend-driver: ${{ inputs.backend-driver }}
           target: ${{ inputs.target }}
 
       - name: iac-github-actions // run-tests // validate
-        uses: actions/terraform-validate
+        uses: ./.github/actions/terraform-validate
         with:
           runner: ubuntu-latest
           source-dir: test
