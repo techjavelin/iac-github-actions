@@ -20,7 +20,6 @@ on:
 jobs:
   test:
     name: iac-github-actions // run-tests 
-    needs: _prepare-tests
 
     runs-on: ubuntu-latest
 
