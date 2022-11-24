@@ -66,8 +66,8 @@ jobs:
         uses: hashicorp/setup-terraform@v2
 
       - name: terraform // prepare // init
-        id: init -chdir=${{ inputs.source-dir }}
-        run: terraform init
+        id: init
+        run: terraform -chdir=${{ inputs.source-dir }} init
 
       - name: terraform // prepare // plan
         id: plan
