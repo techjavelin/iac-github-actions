@@ -9,6 +9,9 @@ inputs:
   backend-driver:
     description: "The backend driver to use for the tests"
     required: true
+  tests-path:
+    description: a
+    required: true
 
 runs:
   using: composite
@@ -17,7 +20,7 @@ runs:
       id: prepare
       run: test/scripts/prepare_test.sh
       env:
-        TEST_TARGET_PATH: test/
+        TEST_TARGET_PATH: ${{ inputs.tests-path }}
         BACKEND: ${{ inputs.backend-driver }}
         TEST_NAME: ${{ inputs.test-name }}
       shell: bash

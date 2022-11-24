@@ -19,6 +19,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      test-path: ${{ runner.temp }}/${{ inputs.test-name }}-${{ inputs.backend-driver }}-${{ github.run_id }}.${{ github.rub_number }}-${{ github.run_attempt }}
+
     steps:
       - name: iac-github-actions // run-tests // checkout
         uses: actions/checkout@v3
@@ -28,29 +31,10 @@ jobs:
         with:
           test-name: ${{ inputs.test-name }}
           backend-driver: ${{ inputs.backend-driver }}
+          tests-path: ${{ env.test-path }}
 
       - name: iac-github-actions // run-tests // validate
         uses: ./.github/actions/terraform-validate
         with:
           runner: ubuntu-latest
-          source-dir: test
-          cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}
-
-  # _prepare-tests:
-  #   uses: ./.github/workflows/prepare-tests.yml
-  #   with:
-  #     test-name: ${{ inputs.test-name }}
-  #     backend-driver: ${{ inputs.backend-driver }}
-  #     target: ${{ inputs.target }}
-
-  # _run-tests:
-  #   needs: _prepare-tests
-  #   strategy:
-  #     fail-fast: true
-  #     matrix: 
-  #       target: [ 'workflow-terraform-validate', 'workflow-terraform-tflint' , 'workflow-terraform-prepare' ]
-  #   uses: ./.github/workflows/run-tests.yml
-  #   with:
-  #     test-name: ${{ inputs.test-name }}
-  #     backend-driver: ${{ inputs.backend-driver }}
-  #     target: ${{ inputs.target }}
+          source-dir: ${{ env.test-path }}

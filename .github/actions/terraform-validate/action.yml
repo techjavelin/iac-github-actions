@@ -13,10 +13,6 @@ inputs:
     required: false
     default: '.'
 
-  cache-key:
-    description: "Will use a cached version of the source-dir if found"
-    required: false
-
 outputs:
   init:
     description: "Initialization Output"
