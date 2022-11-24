@@ -19,28 +19,35 @@ on:
 
 jobs:
   do-test-validate:
-    needs: [ _prepare-tests ]
-    uses: ./.github/workflows/workflow-terraform-validate.yml
+    uses: ./.github/workflows/${{ inputs.target }}.yml
     with:
       runner: ubuntu-latest
       source-dir: test
-      cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}-validation
-    if: ${{ inputs.target == 'validate' }}
+      cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}-${{ inputs.target }}
 
-  do-test-lint:
-    needs: [ _prepare-tests ]
-    uses: ./.github/workflows/workflow-terraform-validate.yml
-    with:
-      runner: ubuntu-latest
-      source-dir: test
-      cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}-lint
-    if: ${{ inputs.target == 'lint' }}
+  # do-test-validate:
+  #   needs: [ _prepare-tests ]
+  #   uses: ./.github/workflows/workflow-terraform-validate.yml
+  #   with:
+  #     runner: ubuntu-latest
+  #     source-dir: test
+  #     cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}-validation
+  #   if: ${{ inputs.target == 'validate' }}
 
-  do-test-prepare:
-    needs: [ _prepare-tests ]
-    uses: ./.github/workflows/workflow-terraform-prepare.yml
-    with:
-      runner: ubuntu-latest
-      source-dir: test
-      cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}-prepare
-    if: ${{ inputs.target == 'prepare' }}
+  # do-test-lint:
+  #   needs: [ _prepare-tests ]
+  #   uses: ./.github/workflows/workflow-terraform-lint.yml
+  #   with:
+  #     runner: ubuntu-latest
+  #     source-dir: test
+  #     cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}-lint
+  #   if: ${{ inputs.target == 'lint' }}
+
+  # do-test-prepare:
+  #   needs: [ _prepare-tests ]
+  #   uses: ./.github/workflows/workflow-terraform-prepare.yml
+  #   with:
+  #     runner: ubuntu-latest
+  #     source-dir: test
+  #     cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}-prepare
+  #   if: ${{ inputs.target == 'prepare' }}
