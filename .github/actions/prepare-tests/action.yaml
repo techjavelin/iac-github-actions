@@ -13,15 +13,6 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: iac-github-actions // test // checkout
-      uses: actions/checkout@v3
-
-    - name: iac-github-actions // test // terraform // cache
-      uses: actions/cache@v3
-      with:
-        path: test/
-        key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}
-
     - name: iac-github-actions // test // terraform // prepare-tests
       id: prepare
       run: test/scripts/prepare_test.sh
