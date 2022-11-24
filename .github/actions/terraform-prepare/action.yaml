@@ -35,9 +35,7 @@ runs:
 
     - name: terraform // prepare // plan
       id: plan
-      run: |
-        terraform -chdir=${{ inputs.source-dir }} plan -out=${{ inputs.artifact-name }} -no-color
-        echo "Generated Terraform Plan Successfully to `${{ inputs.artifact_name }} >> $GITHUB_STEP_SUMMARY"
+      run: terraform -chdir=${{ inputs.source-dir }} plan -out=${{ inputs.artifact-name }} -no-color
       shell: bash
     
     - name: terraform // prepare // upload        
