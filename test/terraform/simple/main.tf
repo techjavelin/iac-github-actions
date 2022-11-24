@@ -1,7 +1,5 @@
 resource "null_resource" "simple-test" {
-    lifecycle {
-      precondition {
-        condition = true
-      }
-    }
+  provisioner "local-exec" {
+    command = "echo test"
+  }
 }
