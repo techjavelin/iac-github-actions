@@ -23,8 +23,8 @@ jobs:
       - name: iac-github-actions // run-tests // checkout
         uses: actions/checkout@v3
 
-      - name: iac-github-actions // run-tests // prepare // cache-workspace
-        id: cache-workspace
+      - name: iac-github-actions // run-tests // prepare // workspace
+        id: workspace
         uses: actions/cache@v3
         with:
           path: ${{ env.test-path }}
@@ -43,6 +43,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: iac-github-actions // run-tests // test-validation-no-errors // checkout
+        uses: actions/checkout@v3
+
+      - name: iac-github-actions // run-tests // test-validation-no-errors // workspace
+        id: workspace
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.test-path }}
+          key: ${{ env.test-path }}
+
       - name: iac-github-actions // run-tests // test-validation // run-validate-action
         uses: ./.github/actions/terraform-validate
         with:
@@ -60,6 +70,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: iac-github-actions // run-tests // test-prepare-no-errors // checkout
+        uses: actions/checkout@v3
+
+      - name: iac-github-actions // run-tests // test-prepare-no-errors // workspace
+        id: workspace
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.test-path }}
+          key: ${{ env.test-path }}
+
       - name: iac-github-actions // run-tests // test-prepare-no-errors // run-prepare-action
         id: prepare
         uses: ./.github/actions/terraform-prepare
