@@ -1,5 +1,5 @@
 name: 'techjavelin/iac-github-actions // terraform // prepare'
-decsription: 'Creates a plan and makes it accessible as outputs and as a binary artifact to be consumed by apply'
+description: 'Creates a plan and makes it accessible as outputs and as a binary artifact to be consumed by apply'
 
 inputs:
   source-dir:

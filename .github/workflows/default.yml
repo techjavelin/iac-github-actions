@@ -7,6 +7,16 @@ on:
       - 'main'
 
 jobs:
+  actions-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: iac-github-actions // lint // checkout
+        uses: actions/checkout@v3
+
+      - name: iac-github-actions // lint // test
+        run: find .github/actions -type f -name "*.yml" -exec ./dev_tools/action-validator_linux_amd64 -v {} \;
+
   terraform:
     strategy:
       matrix:

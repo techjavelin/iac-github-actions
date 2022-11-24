@@ -1,6 +1,6 @@
 ---
 name: 'techjavelin/iac-github-actions // terraform // validate'
-decsription: 'Performs a Validation of all terraform files'
+description: 'Performs a Validation of all terraform files'
 
 inputs:
   source-dir:

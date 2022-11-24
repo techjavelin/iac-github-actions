@@ -1,5 +1,5 @@
 name: 'techjavelin/iac-github-actions // terraform // lint'
-decsription: 'Lints your terraform files using tflint'
+description: 'Lints your terraform files using tflint'
 
 inputs:
   source-dir:

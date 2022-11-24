@@ -1,0 +1,43 @@
+---
+name: 'techjavelin/iac-github-actions // terraform // terratest'
+description: 'Run terratest against your terraform source'
+
+inputs:
+  source-dir:
+    description: "Absolute or relative path from project root to where your terraform files are"
+    required: false
+
+  tests-dir:
+    description: "Absolute or relative path (from project root) to where your terratest source files are"
+    required: true    
+
+  test-tag:
+    description: "Which tag to run (can be either 'unit' or 'integration')"
+    required: true
+
+  go-version:
+    description: "Which version of go to run your tests with (default: 1.13)"
+    required: false
+    default: '1.13'
+
+runs:
+  using: composite
+  steps:
+    - name: terratest // setup-go
+      id: setup-go
+      uses: actions/setup-go@@assertions/is-equal:v1
+      with:
+        go-version: ${{ inputs.go-version }}
+    
+    - name: terratest // setup-terraform
+      uses: hashicorp/setup-terraform@v2
+
+    - name: terratest // download-go-modules
+      working-directory: ${{ inputs.tests-dir }}
+      run: go mod download
+      shell: bash
+
+    - name: terratest // run-tests
+      shell: bash
+      run: go test -v -tags=${{ inputs.test-tag }}
+     
