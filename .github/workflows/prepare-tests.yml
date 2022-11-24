@@ -4,7 +4,6 @@ name: iac-github-actions // prepare-tests
 on:
   workflow_call:
     inputs:
-    inputs:
       test-name:
         description: "Which tests to run"
         required: true
