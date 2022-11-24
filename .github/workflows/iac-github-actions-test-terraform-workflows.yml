@@ -24,7 +24,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: iac-github-actions // run-tests // prespare
+      - name: iac-github-actions // run-tests // checkout
+        uses: actions/checkout@v3
+
+      - name: iac-github-actions // run-tests // prepare
         uses: ./.github/actions/prepare-tests
         with:
           test-name: ${{ inputs.test-name }}
