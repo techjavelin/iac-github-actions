@@ -12,7 +12,6 @@ jobs:
       matrix:
         test: [ 'simple' ]
         backend: [ 'local', 'terraform-cloud' ]
-        target: [ 'workflow-terraform-validate', 'workflow-terraform-tflint' , 'workflow-terraform-prepare' ]
     uses: ./.github/workflows/iac-github-actions-test-terraform-workflows.yml
     with:
       test-name: ${{ matrix.test }}
