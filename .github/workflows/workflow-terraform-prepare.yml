@@ -62,6 +62,8 @@ jobs:
           key: ${{ inputs.cache-key }}
         if: ${{ inputs.cache-key != '' }}
 
+      - run: ls -aslrth
+
       - name: terraform // prepare // setup
         uses: hashicorp/setup-terraform@v2
 
