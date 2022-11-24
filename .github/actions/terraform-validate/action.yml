@@ -3,11 +3,6 @@ name: 'techjavelin/iac-github-actions // terraform // validate'
 decsription: 'Performs a Validation of all terraform files'
 
 inputs:
-  runner:
-    description: "Where the job should run (e.g. 'self-hosted', 'ubuntu-latest', etc)"
-    required: true
-    default: 'ubuntu-latest'
-
   source-dir:
     description: "Absolute path or relative path from project root to where your terraform files are"
     required: false

@@ -36,5 +36,10 @@ jobs:
       - name: iac-github-actions // run-tests // validate
         uses: ./.github/actions/terraform-validate
         with:
-          runner: ubuntu-latest
           source-dir: ${{ env.test-path }}
+
+      - name: iac-github-actions // run-tests // lint
+        uses: ./.github/actions/terraform-lint
+        with:
+          source-dir: ${{ env.test-path }}
+
