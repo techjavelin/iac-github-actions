@@ -45,6 +45,3 @@ runs:
         name: ${{ inputs.artifact-name }}
         path: ${{ inputs.source-dir }}/plan.tfplan
         if-no-files-found: error
-
-    - run: "echo Plan Result: ${{steps.plan.outputs.outcome}}"
-      shell: bash

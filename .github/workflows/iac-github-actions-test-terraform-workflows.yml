@@ -45,7 +45,14 @@ jobs:
         continue-on-error: true
 
       - name: iac-github-actions // run-tests // prepare
+        id: prepare
         uses: ./.github/actions/terraform-prepare
         with:
           source-dir: ${{ env.test-path }}
-        
+
+      - run: |
+          echo "Plan Outcome : ${{ steps.prepare.outputs.outcome }}"
+          echo "Artifact     : ${{ steps.prepare.outputs.artifact }}"
+          echo "::group::Plan"
+          echo "Plan         : ${{ steps.prepare.outputs.plan }}"
+          echo "::endgroup::"
