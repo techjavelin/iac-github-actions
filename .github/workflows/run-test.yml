@@ -26,7 +26,6 @@ jobs:
   #     cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}-${{ inputs.target }}
 
   do-test-validate:
-    needs: [ _prepare-tests ]
     uses: ./.github/workflows/workflow-terraform-validate.yml
     with:
       runner: ubuntu-latest
@@ -35,7 +34,6 @@ jobs:
     if: ${{ inputs.target == 'validate' }}
 
   do-test-lint:
-    needs: [ _prepare-tests ]
     uses: ./.github/workflows/workflow-terraform-lint.yml
     with:
       runner: ubuntu-latest
@@ -44,7 +42,6 @@ jobs:
     if: ${{ inputs.target == 'lint' }}
 
   do-test-prepare:
-    needs: [ _prepare-tests ]
     uses: ./.github/workflows/workflow-terraform-prepare.yml
     with:
       runner: ubuntu-latest
