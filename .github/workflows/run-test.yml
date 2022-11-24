@@ -34,12 +34,13 @@ jobs:
       runner: ubuntu-latest
       source-dir: test
       cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}-lint
-    if: ${{ inputs.target == 'validate' }}
+    if: ${{ inputs.target == 'lint' }}
 
   do-test-prepare:
     needs: [ _prepare-tests ]
-    uses: ./.github/workflows/workflow-terraform-${{ inputs.target }}.yml
+    uses: ./.github/workflows/workflow-terraform-prepare.yml
     with:
       runner: ubuntu-latest
       source-dir: test
       cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}-prepare
+    if: ${{ inputs.target == 'prepare' }}
