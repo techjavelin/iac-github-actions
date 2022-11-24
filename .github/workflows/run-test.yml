@@ -1,0 +1,45 @@
+---
+name: iac-github-actions // run-tests
+
+on: 
+  workflow_call:
+    inputs:
+      test-name:
+        description: "Which tests to run"
+        required: true
+        type: string
+      backend-driver:
+        description: "The backend driver to use for the tests"
+        required: true
+        type: string
+      target: 
+        description: "The workflow being targeted"
+        required: true
+        type: string
+
+jobs:
+  do-test-validate:
+    needs: [ _prepare-tests ]
+    uses: ./.github/workflows/workflow-terraform-validate.yml
+    with:
+      runner: ubuntu-latest
+      source-dir: test
+      cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}-validation
+    if: ${{ inputs.target == 'validate' }}
+
+  do-test-lint:
+    needs: [ _prepare-tests ]
+    uses: ./.github/workflows/workflow-terraform-validate.yml
+    with:
+      runner: ubuntu-latest
+      source-dir: test
+      cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}-lint
+    if: ${{ inputs.target == 'validate' }}
+
+  do-test-prepare:
+    needs: [ _prepare-tests ]
+    uses: ./.github/workflows/workflow-terraform-${{ inputs.target }}.yml
+    with:
+      runner: ubuntu-latest
+      source-dir: test
+      cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}-prepare

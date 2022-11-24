@@ -39,14 +39,9 @@ on:
         value: ${{ jobs.validate.outputs.validation }}
 
 jobs:
-  validate:
-    name: terraform // valdate
+  lint:
+    name: terraform // lint
     runs-on: ${{ inputs.runner }}
-
-    outputs:
-      validation: ${{ steps.validate.outcome }}
-      outcome: ${{ steps.format.outcome }}
-      details: ${{ steps.format.outputs.stdout }}
 
     steps:
       - uses: actions/checkout@v3
@@ -57,17 +52,15 @@ jobs:
           key: ${{ inputs.cache-key }}
         if: ${{ inputs.cache-key != '' }}
 
-      - name: Install Terraform
-        uses: hashicorp/setup-terraform@v2
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v2
+        with:
+          tflint_version: v0.38.1
 
-      - name: Setup
-        id: init
-        run: terraform -chdir=${{ inputs.source-dir }} init -backend=false
+      - name: Initialize TFLint
+        run: tflint --init
+        working-directory: ${{ inputs.source-dir }}
 
-      - name: Format
-        id: format
-        run: terraform -chdir=${{ inputs.source-dir }} fmt -no-color -recursive
-
-      - name: Validate
-        id: validate
-        run: terraform -chdir=${{ inputs.source-dir }} validate -no-color
+      - name: Lint Terraform
+        run: tflint -f compact
+        working-directory: ${{ inputs.source-dir }}
