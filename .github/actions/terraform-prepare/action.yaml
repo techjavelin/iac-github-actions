@@ -43,4 +43,4 @@ runs:
       id: upload
       with:
         name: ${{ inputs.artifact-name }}
-        path: plan.tfplan
+        path: ${{ inputs.source-dir }}/plan.tfplan
