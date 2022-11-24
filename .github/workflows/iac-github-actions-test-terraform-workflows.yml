@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      test-path: ${{ runner.temp }}/${{ inputs.test-name }}-${{ inputs.backend-driver }}-${{ github.run_id }}.${{ github.rub_number }}-${{ github.run_attempt }}
+      test-path: ${{ inputs.test-name }}-${{ inputs.backend-driver }}-${{ github.run_id }}.${{ github.rub_number }}-${{ github.run_attempt }}
 
     steps:
       - name: iac-github-actions // run-tests // checkout
