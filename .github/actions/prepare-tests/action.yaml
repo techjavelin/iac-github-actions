@@ -18,4 +18,6 @@ runs:
       run: test/scripts/prepare_test.sh
       env:
         TEST_TARGET_PATH: test/
+        BACKEND: ${{ inputs.backend-driver }}
+        TEST_NAME: ${{ inputs.test-name }}
       shell: bash
