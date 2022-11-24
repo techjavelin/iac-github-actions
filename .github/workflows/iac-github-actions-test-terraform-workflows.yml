@@ -13,18 +13,22 @@ on:
         required: true
         type: string
 
+env:
+  test-path: ${{ inputs.test-name }}-${{ inputs.backend-driver }}-${{ github.run_id }}.${{ github.run_number }}-${{ github.run_attempt }}
+
 jobs:
-  test:
-    name: iac-github-actions // run-tests 
-
+  prepare-tests:
     runs-on: ubuntu-latest
-
-    env:
-      test-path: ${{ inputs.test-name }}-${{ inputs.backend-driver }}-${{ github.run_id }}.${{ github.run_number }}-${{ github.run_attempt }}
-
     steps:
       - name: iac-github-actions // run-tests // checkout
         uses: actions/checkout@v3
+
+      - name: iac-github-actions // run-tests // prepare // cache-workspace
+        id: cache-workspace
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.test-path }}
+          key: ${{ env.test-path }}
 
       - name: iac-github-actions // run-tests // prepare
         uses: ./.github/actions/prepare-tests
@@ -33,18 +37,30 @@ jobs:
           backend-driver: ${{ inputs.backend-driver }}
           tests-path: ${{ env.test-path }}
 
-      - name: iac-github-actions // run-tests // validate
+  test-validation-no-errors:
+    name: iac-github-actions // run-tests // test-validation-no-errors
+    needs: prepare-tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: iac-github-actions // run-tests // test-validation // run-validate-action
         uses: ./.github/actions/terraform-validate
         with:
           source-dir: ${{ env.test-path }}
 
-      - name: iac-github-actions // run-tests // lint
+      - name: iac-github-actions // run-tests // test-validation // run-lint-action
         uses: ./.github/actions/terraform-lint
         with:
           source-dir: ${{ env.test-path }}
         continue-on-error: true
 
-      - name: iac-github-actions // run-tests // prepare
+  test-prepare-no-errors:
+    name: iac-github-actions // run-tests // test-prepare-no-errors
+    needs: prepare-tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: iac-github-actions // run-tests // test-prepare-no-errors // run-prepare-action
         id: prepare
         uses: ./.github/actions/terraform-prepare
         with:
@@ -57,14 +73,14 @@ jobs:
           echo "Plan         : ${{ steps.prepare.outputs.plan }}"
           echo "::endgroup::"
 
-      - name: iac-github-actions // run-tests // prepare // validate outcome
+      - name: iac-github-actions // run-tests // test-prepare-no-errors // validate outcome
         uses: pr-mpt/actions-assert@v4
         with:
           assertion: npm://@assertions/is-equal:v1
           actual: ${{ steps.prepare.outputs.result }}
           expected: success
 
-      - name: iac-github-actions // run-tests // prepare // validate artifact
+      - name: iac-github-actions // run-tests // test-prepare-no-errors // validate artifact
         uses: pr-mpt/actions-assert@v4
         with:
           assertion: npm://@assertions/is-equal:v1
