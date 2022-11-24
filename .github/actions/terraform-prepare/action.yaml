@@ -17,7 +17,7 @@ outputs:
     value: ${{ steps.plan.outputs.stdout }}
   result:
     description: "The outcome of running plan"
-    value: ${{ steps.plan.outputs.outcome }}
+    value: ${{ steps.plan.outcome }}
   artifact:
     description: "The name of the artifact uploaded"
     value: ${{ inputs.artifact-name }}

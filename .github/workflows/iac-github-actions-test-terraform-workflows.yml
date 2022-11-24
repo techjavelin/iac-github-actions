@@ -51,7 +51,7 @@ jobs:
           source-dir: ${{ env.test-path }}
 
       - run: |
-          echo "Plan Outcome : ${{ steps.prepare.outputs.outcome }}"
+          echo "Plan Outcome : ${{ steps.prepare.outcome }}"
           echo "Artifact     : ${{ steps.prepare.outputs.artifact }}"
           echo "::group::Plan"
           echo "Plan         : ${{ steps.prepare.outputs.plan }}"
