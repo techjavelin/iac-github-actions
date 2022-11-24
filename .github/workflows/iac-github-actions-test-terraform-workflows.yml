@@ -25,20 +25,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: iac-github-actions // run-test // validate
-        uses: actions/terraform-validate@head
+      - name: iac-github-actions // run-tests // prespare
+        uses: actions/prepare-tests
+        with:
+          test-name: ${{ inputs.test-name }}
+          backend-driver: ${{ inputs.backend-driver }}
+          target: ${{ inputs.target }}
+
+      - name: iac-github-actions // run-tests // validate
+        uses: actions/terraform-validate
         with:
           runner: ubuntu-latest
           source-dir: test
           cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}-validate
         if: ${{ inputs.target == 'validate' }}
 
-  _prepare-tests:
-    uses: ./.github/workflows/prepare-tests.yml
-    with:
-      test-name: ${{ inputs.test-name }}
-      backend-driver: ${{ inputs.backend-driver }}
-      target: ${{ inputs.target }}
+  # _prepare-tests:
+  #   uses: ./.github/workflows/prepare-tests.yml
+  #   with:
+  #     test-name: ${{ inputs.test-name }}
+  #     backend-driver: ${{ inputs.backend-driver }}
+  #     target: ${{ inputs.target }}
 
   # _run-tests:
   #   needs: _prepare-tests
