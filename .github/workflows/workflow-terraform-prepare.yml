@@ -11,7 +11,7 @@ on:
         type: string
 
       source-dir:
-        description: "Relative path from project root to where your terraform files are"
+        description: "Absolute path or relative path from project root to where your terraform files are"
         required: false
         default: '.'
         type: string
@@ -20,11 +20,6 @@ on:
         description: "Will use a cached version of the source-dir if found"
         required: false
         type: string
-
-    secrets:
-      cloud_api_key:
-        description: "If you use terraform cloud for a backend, provide your cloud api key"
-        required: false
 
     outputs:
       plan:
@@ -41,59 +36,47 @@ on:
 
 jobs:
   plan:
-    name: techjavelin/iac-github-actions // terraform // prepare // plan
+    name: terraform // prepare // plan
     runs-on: ${{ inputs.runner }}
-
-    permissions:
-      # Needed to upload the results of scorecard analysis to the code-scanning dashboard
-      security-events: write
 
     defaults:
       run:
         working-directory: ${{ inputs.source-dir }}
 
     outputs:
-      init: ${{ steps.init.outcome }}
       result: ${{ steps.plan.outcome }}
       plan: ${{ steps.plan.outputs.stdout }}
       artifact: ${{ steps.plan.outputs.artifact }}
 
     env:
-      cloud_api_key: ${{ secrets.cloud_api_key }}
       artifact_name: ${{ github.sha }}-${{ github.run_id }}-${{ github.run_number }}.tfplan
 
     steps:
-      - name: Checkout from Source Control
+      - name: terraform // prepare // checkout
         uses: actions/checkout@v3
 
-      - uses: actions/cache@v3
+      - name: terraform // prepare // cache
+        uses: actions/cache@v3
         with:
           path: ${{ inputs.source-dir }}
           key: ${{ inputs.cache-key }}
         if: ${{ inputs.cache-key != '' }}
 
-      - if: ${{ env.cloud_api_key != '' }}
-        name: Setup Terraform (Using Terraform Cloud)
-        uses: hashicorp/setup-terraform@v2
-        with:
-          cli_config_credentials_token: ${{ env.cloud_api_key }}
-
-      - if: ${{ env.cloud_api_key == '' }}
-        name: Setup Terraform
+      - name: terraform // prepare // setup
         uses: hashicorp/setup-terraform@v2
 
-      - name: Terraform Init
-        id: init
+      - name: terraform // prepare // init
+        id: init -chdir=${{ inputs.source-dir }}
         run: terraform init
 
-      - name: Generate Plan
+      - name: terraform // prepare // plan
         id: plan
         run: |
           terraform -chdir=${{ inputs.source-dir }} plan -out=${{ env.artifact_name }} -no-color
           echo "artifact=${{ env.artifact_name }} >> $GITHUB_OUTPUT"
           echo "Generated Terraform Plan Successfully to `${{ env.artifact_name }} >> $GITHUB_STEP_SUMMARY"
       
-      - name: Save the Plan to be used later
+      - name: terraform // prepare // upload        
         uses: actions/upload-artifact@v3
         id: upload
         with:
