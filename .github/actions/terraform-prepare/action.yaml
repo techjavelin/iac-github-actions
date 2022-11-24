@@ -9,7 +9,7 @@ inputs:
   artifact-name:
     description: "Customize the name of the artifact" 
     required: false
-    default: '${{ github.sha }}-${{ github.run_id }}-${{ github.run_number }}.tfplan'
+    default: 'plan-${{ github.sha }}-${{ github.run_id }}-${{ github.run_number }}'
 
 outputs:
   plan: 
