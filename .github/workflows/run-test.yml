@@ -18,14 +18,8 @@ on:
         type: string
 
 jobs:
-  # do-test-validate:
-  #   uses: ./.github/workflows/${{ inputs.target }}.yml
-  #   with:
-  #     runner: ubuntu-latest
-  #     source-dir: test
-  #     cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}-${{ inputs.target }}
-
   do-test-validate:
+    name: iac-github-actions // run-tests // call workflow
     uses: ./.github/workflows/workflow-terraform-validate.yml
     with:
       runner: ubuntu-latest
@@ -33,18 +27,18 @@ jobs:
       cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}-${{ inputs.target }}
     if: ${{ inputs.target == 'validate' }}
 
-  do-test-lint:
-    uses: ./.github/workflows/workflow-terraform-lint.yml
-    with:
-      runner: ubuntu-latest
-      source-dir: test
-      cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}-${{ inputs.target }}
-    if: ${{ inputs.target == 'lint' }}
+  # do-test-lint:
+  #   uses: ./.github/workflows/workflow-terraform-lint.yml
+  #   with:
+  #     runner: ubuntu-latest
+  #     source-dir: test
+  #     cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}-${{ inputs.target }}
+  #   if: ${{ inputs.target == 'lint' }}
 
-  do-test-prepare:
-    uses: ./.github/workflows/workflow-terraform-prepare.yml
-    with:
-      runner: ubuntu-latest
-      source-dir: test
-      cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}-${{ inputs.target }}
-    if: ${{ inputs.target == 'prepare' }}
+  # do-test-prepare:
+  #   uses: ./.github/workflows/workflow-terraform-prepare.yml
+  #   with:
+  #     runner: ubuntu-latest
+  #     source-dir: test
+  #     cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}-${{ inputs.target }}
+  #   if: ${{ inputs.target == 'prepare' }}
