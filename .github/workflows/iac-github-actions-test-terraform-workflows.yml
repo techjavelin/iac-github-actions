@@ -42,4 +42,10 @@ jobs:
         uses: ./.github/actions/terraform-lint
         with:
           source-dir: ${{ env.test-path }}
+        continue-on-error: true
 
+      - name: iac-github-actions // run-tests // prepare
+        uses: ./.github/actions/terraform-prepare
+        with:
+          source-dir: ${{ env.test-path }}
+        

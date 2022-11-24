@@ -1,0 +1,48 @@
+name: 'techjavelin/iac-github-actions // terraform // prepare'
+decsription: 'Creates a plan and makes it accessible as outputs and as a binary artifact to be consumed by apply'
+
+inputs:
+  source-dir:
+    description: "Absolute path or relative path from project root to where your terraform files are"
+    required: false
+    default: '.'
+  artifact-name:
+    description: "Customize the name of the artifact" 
+    required: false
+    default: '${{ github.sha }}-${{ github.run_id }}-${{ github.run_number }}.tfplan'
+
+outputs:
+  plan: 
+    description: "The plan output"
+    value: ${{ steps.plan.outputs.stdout }}
+  result:
+    description: "The outcome of running plan"
+    value: ${{ steps.plan.outputs.outcome }}
+  artifact:
+    description: "The name of the artifact uploaded"
+    value: ${{ inputs.artifact-name }}
+
+runs:
+  using: composite
+  steps:
+    - name: terraform // prepare // setup
+      uses: hashicorp/setup-terraform@v2
+
+    - name: terraform // prepare // init
+      id: init
+      run: terraform -chdir=${{ inputs.source-dir }} init
+      shell: bash
+
+    - name: terraform // prepare // plan
+      id: plan
+      run: |
+        terraform -chdir=${{ inputs.source-dir }} plan -out=${{ inputs.artifact-name }} -no-color
+        echo "Generated Terraform Plan Successfully to `${{ inputs.artifact_name }} >> $GITHUB_STEP_SUMMARY"
+      shell: bash
+    
+    - name: terraform // prepare // upload        
+      uses: actions/upload-artifact@v3
+      id: upload
+      with:
+        name: terraform-plan
+        path: ${{  inputs.artifact-name }}
