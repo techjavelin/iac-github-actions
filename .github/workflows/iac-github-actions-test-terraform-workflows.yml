@@ -40,7 +40,7 @@ jobs:
           runner: ubuntu-latest
           source-dir: test
           cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}-validate
-        if: ${{ inputs.target == 'validate' }}
+        if: ${{ inputs.target == 'workflow-terraform-validate' }}
 
   # _prepare-tests:
   #   uses: ./.github/workflows/prepare-tests.yml
