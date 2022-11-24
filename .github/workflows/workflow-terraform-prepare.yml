@@ -41,7 +41,7 @@ on:
 
 jobs:
   plan:
-    name: Generate Terraform Plan
+    name: techjavelin/iac-github-actions // terraform // prepare // plan
     runs-on: ${{ inputs.runner }}
 
     permissions:
@@ -89,7 +89,7 @@ jobs:
       - name: Generate Plan
         id: plan
         run: |
-          terraform -out=${{ env.artifact_name }} -no-color
+          terraform -chdir=${{ inputs.source-dir }} plan -out=${{ env.artifact_name }} -no-color
           echo "artifact=${{ env.artifact_name }} >> $GITHUB_OUTPUT"
           echo "Generated Terraform Plan Successfully to `${{ env.artifact_name }} >> $GITHUB_STEP_SUMMARY"
       
