@@ -61,14 +61,14 @@ jobs:
         uses: pr-mpt/actions-assert@v4
         with:
           assertion: npm://@assertions/is-equal:v1
-          action: ${{ steps.prepare.outputs.result }}
+          actual: ${{ steps.prepare.outputs.result }}
           expected: success
 
       - name: iac-github-actions // run-tests // prepare // validate artifact
         uses: pr-mpt/actions-assert@v4
         with:
           assertion: npm://@assertions/is-equal:v1
-          action: ${{ steps.prepare.outputs.artifact }}
+          actual: ${{ steps.prepare.outputs.artifact }}
           expected: plan-${{ github.sha }}-${{ github.run_id }}-${{ github.run_number }}
 
       
