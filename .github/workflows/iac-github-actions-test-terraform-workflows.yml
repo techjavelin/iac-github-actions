@@ -34,7 +34,7 @@ jobs:
         if: ${{ inputs.target == 'validate' }}
 
   _prepare-tests:
-    uses: ./.github/workflows/prepare-tests.yml
+    uses: actions/prepare-tests.yml@head
     with:
       test-name: ${{ inputs.test-name }}
       backend-driver: ${{ inputs.backend-driver }}
