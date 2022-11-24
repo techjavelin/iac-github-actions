@@ -12,10 +12,6 @@ on:
         description: "The backend driver to use for the tests"
         required: true
         type: string
-      target: 
-        description: "The workflow being targeted"
-        required: true
-        type: string
 
 jobs:
   test:
@@ -32,15 +28,13 @@ jobs:
         with:
           test-name: ${{ inputs.test-name }}
           backend-driver: ${{ inputs.backend-driver }}
-          target: ${{ inputs.target }}
 
       - name: iac-github-actions // run-tests // validate
         uses: ./.github/actions/terraform-validate
         with:
           runner: ubuntu-latest
           source-dir: test
-          cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}-validate
-        if: ${{ inputs.target == 'workflow-terraform-validate' }}
+          cache-key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}
 
   # _prepare-tests:
   #   uses: ./.github/workflows/prepare-tests.yml

@@ -9,9 +9,6 @@ inputs:
   backend-driver:
     description: "The backend driver to use for the tests"
     required: true
-  target: 
-    description: "The workflow being targeted"
-    required: true
 
 runs:
   using: composite
@@ -23,7 +20,7 @@ runs:
       uses: actions/cache@v3
       with:
         path: test/
-        key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}-${{ inputs.target }}
+        key: ${{github.sha}}-${{inputs.backend-driver}}-${{inputs.test-name}}
 
     - name: iac-github-actions // test // terraform // prepare-tests
       id: prepare
